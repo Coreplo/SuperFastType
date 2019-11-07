@@ -7,6 +7,7 @@ const canvasSizeY = 750;
 let prevEventTime = new Date();
 let currentEventTime = new Date();
 let timeItTooktoPressTheRightKey=0;
+let timeIntervalsArray=[];
 
 
 let arrayOfChars ;
@@ -168,6 +169,7 @@ function keyPressed() {
         timeItTooktoPressTheRightKey =currentEventTime.getTime()-prevEventTime.getTime();
         prevEventTime= new Date();
 
+        timeIntervalsArray.push(timeItTooktoPressTheRightKey);
 
         console.log("charPos " + charPos + " - char=" + arrayOfChars[charPos] );
       }
@@ -246,6 +248,7 @@ function initString(){
   charPos = 0;
   arrayOfChars = randomString();
   initializeNextKey(); 
+  timeIntervalsArray = [];
 }
 
 function printTime(){
@@ -253,6 +256,13 @@ function printTime(){
   textSize(kbs*0.6);
   currentEventTime = new Date();
   let timeLapsed = currentEventTime.getTime()-prevEventTime.getTime();
-  text(Math.round(timeLapsed/1000 * 10) /10,canvasSizeX-300, 100)
-  text(Math.round(timeItTooktoPressTheRightKey/1000 * 10) /10,canvasSizeX-300, 200)
+  text(Math.round(timeLapsed/1000 * 10) /10,canvasSizeX-100, 100)
+  text(Math.round(timeItTooktoPressTheRightKey/1000 * 10) /10,canvasSizeX-100, 200)
+  let sum = 0;
+  for (let i= 0; i<timeIntervalsArray.length; i++){
+    sum += timeIntervalsArray[i];
+  }
+  let average = sum / timeIntervalsArray.length;
+  text(Math.round(sum/1000 * 10) /10, canvasSizeX - 100, 300);
+  text(Math.round(average/1000 * 10) /10, canvasSizeX - 100, 400);
 };
