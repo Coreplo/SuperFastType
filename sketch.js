@@ -1,7 +1,12 @@
 const kbs = 80; //key Button Size
 const  kx= 30; //keyboard x upperleftCorner
 const ky= 300; //keyboard y upperleftCorner
+const canvasSizeX = 1300;
+const canvasSizeY = 750;
 
+let prevEventTime = new Date();
+let currentEventTime = new Date();
+let timeItTooktoPressTheRightKey=0;
 
 
 let arrayOfChars ;
@@ -50,14 +55,11 @@ class KeyButton{
 }
 
 function setup() { 
-  createCanvas(1300, 750);
+  createCanvas(canvasSizeX,canvasSizeY);
  
-
-
   keys = [
 
     //row one 
-
     new KeyButton(kbs,kbs, kx,       ky,"`"),
     new KeyButton(kbs,kbs, kx+1*kbs, ky,"1"),
     new KeyButton(kbs,kbs, kx+2*kbs, ky,"2"),
@@ -74,7 +76,6 @@ function setup() {
     new KeyButton(kbs*1.50,kbs, kx+13*kbs, ky,"bs"),
 
     //row two
-    
     new KeyButton(kbs+kbs/2, kbs, kx,ky+kbs,"tab" ),
     new KeyButton(kbs,kbs, kx+1*kbs+kbs/2, ky+kbs,"q"),
     new KeyButton(kbs,kbs, kx+2*kbs+kbs/2, ky+kbs,"w"),
@@ -91,7 +92,6 @@ function setup() {
     new KeyButton(kbs,kbs, kx+13*kbs+kbs/2, ky+kbs,"\\"),
 
     //row three
-    
     new KeyButton(kbs+kbs*3/4,kbs, kx,       ky+kbs*2,"caps"),
     new KeyButton(kbs,kbs, kx+  kbs+kbs*3/4, ky+kbs*2,"a"),
     new KeyButton(kbs,kbs, kx+2*kbs+kbs*3/4, ky+kbs*2,"s"),
@@ -107,7 +107,6 @@ function setup() {
     new KeyButton(kbs*1.75,kbs, kx+12*kbs+kbs*3/4, ky+kbs*2,"ent"),
      
     //row four
-
     new KeyButton(kbs+kbs/2,kbs, kx          ,        ky+kbs*3,"shift"),
     new KeyButton(kbs,      kbs, kx + kbs/2 + kbs,   ky+kbs*3,"<"),
     new KeyButton(kbs,      kbs, kx + kbs/2 + 2*kbs, ky+kbs*3,"z"),
@@ -151,6 +150,8 @@ function draw() {
   for (let i = 0; i<keys.length; i++){
     keys[i].paint();
   }
+
+  printTime();
 }
 
 function keyPressed() {
@@ -162,6 +163,12 @@ function keyPressed() {
       if (key===arrayOfChars[charPos]){
         charPos < arrayOfChars.length-1 ? charPos++ : initString();
         element.nextToBePressed = false;
+
+        currentEventTime = new Date()
+        timeItTooktoPressTheRightKey =currentEventTime.getTime()-prevEventTime.getTime();
+        prevEventTime= new Date();
+
+
         console.log("charPos " + charPos + " - char=" + arrayOfChars[charPos] );
       }
     }
@@ -207,6 +214,7 @@ function printMyString(){
     text((arrayOfChars[i]===" " ? "·" : arrayOfChars[i]), textXPos, 150);
     textXPos+=textWidth(arrayOfChars[i]);
   }
+
 }
 
 
@@ -215,7 +223,11 @@ function randomString(){
   var characters       = 'abcdefghijklmnopqrstuvwxyz      ';
   var charactersLength = characters.length;
   for ( var i = 0; i < 20; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    let char=characters.charAt(Math.floor(Math.random() * charactersLength));
+    while (char==" " && result.slice(-1)==" ") {
+        char=characters.charAt(Math.floor(Math.random() * charactersLength));
+      };
+    result += char;
   }
   myArr = result.split("");
   console.log("new string: " + result);
@@ -231,7 +243,16 @@ function initializeNextKey(){
 }
 
 function initString(){
-  charPos=0;
+  charPos = 0;
   arrayOfChars = randomString();
   initializeNextKey(); 
 }
+
+function printTime(){
+  fill(0);
+  textSize(kbs*0.6);
+  currentEventTime = new Date();
+  let timeLapsed = currentEventTime.getTime()-prevEventTime.getTime();
+  text(Math.round(timeLapsed/1000 * 10) /10,canvasSizeX-300, 100)
+  text(Math.round(timeItTooktoPressTheRightKey/1000 * 10) /10,canvasSizeX-300, 200)
+};
