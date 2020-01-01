@@ -43,6 +43,13 @@ class KeyButton{
       textSize(kbs*0.6);
       text (this.kLabel, this.xPos+((this.ySize)/3), this.yPos+((this.ySize)/2));
     }
+    else if (this.kLabel=="a"||this.kLabel=="s"||this.kLabel=="d"||this.kLabel=="f"||this.kLabel=="j"||this.kLabel=="k"||this.kLabel=="l" ) {
+      fill(200);
+      rect(this.xPos, this.yPos, this.xSize,this.ySize);
+      fill(0);
+      textSize(kbs*0.4);
+      text (this.kLabel, this.xPos+((this.ySize)/3), this.yPos+((this.ySize)/2));
+    }
     else {
       fill(255);
       rect(this.xPos, this.yPos, this.xSize,this.ySize);
@@ -152,7 +159,7 @@ function draw() {
     keys[i].paint();
   }
 
-  printTime();
+  //printTime();
 }
 
 function keyPressed() {
@@ -222,7 +229,8 @@ function printMyString(){
 
 function randomString(){
   var result           = '';
-  var characters       = 'abcdefghijklmnopqrstuvwxyz      ';
+  //var characters       = 'abcdefghijklmnopqrstuvwxyz      ';
+  var characters       = 'asdfjkl';
   var charactersLength = characters.length;
   for ( var i = 0; i < 20; i++ ) {
     let char=characters.charAt(Math.floor(Math.random() * charactersLength));
